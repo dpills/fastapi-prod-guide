@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-todos-api
+  name: my-todos-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-todos-api
+  template:
+    metadata:
+      labels:
+        app: my-todos-api
+    spec:
+      containers:
+        - name: my-todos-api
+          image: dpills/fastapi-todos:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: my-todos-api-secret
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi

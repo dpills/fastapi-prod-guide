@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mongo:7.0.1
+    container_name: myAPIdb
+    restart: always
+    ports:
+      - 27017:27017
+    env_file:
+      - .env
+    volumes:
+      - type: volume
+        source: my_api_db_data
+        target: /data/db
+  api:
+    image: dpills/fastapi-todos:1.0.0
+    container_name: fastapi-todos
+    restart: always
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+volumes:
+  my_api_db_data:
